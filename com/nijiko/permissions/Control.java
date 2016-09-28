@@ -2,20 +2,14 @@ package com.nijiko.permissions;
 
 import com.nijiko.Messaging;
 import com.nijikokun.bukkit.Permissions.FileManager;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.logging.Logger;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
+
+import java.io.File;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Permissions 2.x
@@ -106,7 +100,7 @@ public class Control extends PermissionHandler {
     public boolean loadWorld(String world) {
         // log.info("Checking for the world: " + world);
         if(!this.Worlds.contains(world)) {
-            this.load(world, new Configuration(new File(this.directory + File.separator + world + ".yml")));
+            this.load(world, YamlConfiguration.loadConfiguration(new File(this.directory + File.separator + world + ".yml")));
             log.info("Loaded world: " + world);
            return true;
         }
@@ -116,7 +110,7 @@ public class Control extends PermissionHandler {
     }
     
     public void forceLoadWorld(String world) {
-        this.load(world, new Configuration(new File(this.directory + File.separator + world + ".yml")));
+        this.load(world, YamlConfiguration.loadConfiguration(new File(this.directory + File.separator + world + ".yml")));
     }
 
     public boolean checkWorld(String world) {
@@ -140,8 +134,6 @@ public class Control extends PermissionHandler {
             FileManager file = new FileManager(this.directory.getPath() + File.separator, world + ".yml", true);
         }
 
-        config.load();
-
         this.Worlds.add(world);
         this.WorldConfiguration.put(world, config);
 
@@ -163,8 +155,10 @@ public class Control extends PermissionHandler {
         this.WorldGroupsInheritance.put(world, new HashMap<String, Set<String>>());
 
         // Grab the keys we are going to need
-        List<String> userKeys = config.getKeys("users");
-        List<String> groupKeys = config.getKeys("groups");
+        ConfigurationSection users = config.getConfigurationSection("users");
+        ConfigurationSection groups = config.getConfigurationSection("groups");
+        Set<String> userKeys = users.getKeys(false);
+        Set<String> groupKeys = groups.getKeys(false);
 
         // Permission set.
         Set Permissions = new HashSet();
@@ -185,8 +179,8 @@ public class Control extends PermissionHandler {
                 Permissions = new HashSet();
 
                 // Configuration
-                inheritance = config.getStringList("groups." + key + ".inheritance", null);
-                permissions = config.getStringList("groups." + key + ".permissions", null);
+                inheritance = config.getStringList("groups." + key + ".inheritance");
+                permissions = config.getStringList("groups." + key + ".permissions");
                 boolean Default = config.getBoolean("groups." + key + ".default", false);
                 String prefix = config.getString("groups." + key + ".info.prefix", null);
                 String suffix = config.getString("groups." + key + ".info.suffix", null);
@@ -223,7 +217,7 @@ public class Control extends PermissionHandler {
                 Permissions = new HashSet();
 
                 // Configuration
-                permissions = config.getStringList("users." + key + ".permissions", null);
+                permissions = config.getStringList("users." + key + ".permissions");
                 group = config.getString("users." + key + ".group");
 
                 if (group != null) {
@@ -764,9 +758,9 @@ public class Control extends PermissionHandler {
             this.loadWorld(world);
         }
 
-        List<String> list = this.WorldConfiguration.get(world).getStringList("groups." + group + ".permissions", new LinkedList<String>());
+        List<String> list = this.WorldConfiguration.get(world).getStringList("groups." + group + ".permissions");
         list.add(node);
-        this.WorldConfiguration.get(world).setProperty("groups." + group + ".permissions", list);
+        this.WorldConfiguration.get(world).set("groups." + group + ".permissions", list);
     }
     
     public void removeGroupPermission(String world, String group, String node) {
@@ -778,13 +772,13 @@ public class Control extends PermissionHandler {
             this.loadWorld(world);
         }
 
-        List<String> list = this.WorldConfiguration.get(world).getStringList("groups." + group + ".permissions", new LinkedList<String>());
+        List<String> list = this.WorldConfiguration.get(world).getStringList("groups." + group + ".permissions");
         
         if(list.contains(node)) {
             list.remove(node);
         }
         
-        this.WorldConfiguration.get(world).setProperty("groups." + group + ".permissions", list);
+        this.WorldConfiguration.get(world).set("groups." + group + ".permissions", list);
     }
     
     public void addGroupInfo(String world, String group, String node, Object data) {
@@ -796,7 +790,7 @@ public class Control extends PermissionHandler {
             this.loadWorld(world);
         }
 
-        this.WorldConfiguration.get(world).setProperty("groups." + group + ".info." + node, data);
+        this.WorldConfiguration.get(world).set("groups." + group + ".info." + node, data);
     }
     
     public void removeGroupInfo(String world, String group, String node) {
@@ -808,7 +802,7 @@ public class Control extends PermissionHandler {
             this.loadWorld(world);
         }
 
-        this.WorldConfiguration.get(world).removeProperty("groups." + group + ".info." + node);
+        this.WorldConfiguration.get(world).set("groups." + group + ".info." + node, null);
     }
     
     public void addUserPermission(String world, String user, String node) {
@@ -820,9 +814,9 @@ public class Control extends PermissionHandler {
             this.loadWorld(world);
         }
 
-        List<String> list = this.WorldConfiguration.get(world).getStringList("users." + user + ".permissions", new LinkedList<String>());
+        List<String> list = this.WorldConfiguration.get(world).getStringList("users." + user + ".permissions");
         list.add(node);
-        this.WorldConfiguration.get(world).setProperty("users." + user + ".permissions", list);
+        this.WorldConfiguration.get(world).set("users." + user + ".permissions", list);
     }
     
     public void removeUserPermission(String world, String user, String node) {
@@ -834,13 +828,13 @@ public class Control extends PermissionHandler {
             this.loadWorld(world);
         }
 
-        List<String> list = this.WorldConfiguration.get(world).getStringList("users." + user + ".permissions", new LinkedList<String>());
+        List<String> list = this.WorldConfiguration.get(world).getStringList("users." + user + ".permissions");
         
         if(list.contains(node)) {
             list.remove(node);
         }
         
-        this.WorldConfiguration.get(world).setProperty("users." + user + ".permissions", list);
+        this.WorldConfiguration.get(world).set("users." + user + ".permissions", list);
     }
     
     public void addUserInfo(String world, String user, String node, Object data) {
@@ -852,7 +846,7 @@ public class Control extends PermissionHandler {
             this.loadWorld(world);
         }
 
-        this.WorldConfiguration.get(world).setProperty("users." + user + ".info." + node, data);
+        this.WorldConfiguration.get(world).set("users." + user + ".info." + node, data);
     }
     
     public void removeUserInfo(String world, String user, String node) {
@@ -864,7 +858,7 @@ public class Control extends PermissionHandler {
             this.loadWorld(world);
         }
 
-        this.WorldConfiguration.get(world).removeProperty("users." + user + ".info." + node);
+        this.WorldConfiguration.get(world).set("users." + user + ".info." + node, null);
     }
     
     public String getGroupPermissionString(String world, String group, String permission) {

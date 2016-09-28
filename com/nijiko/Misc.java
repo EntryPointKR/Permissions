@@ -1,9 +1,11 @@
 package com.nijiko;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.IOException;
-import org.bukkit.entity.Player;
+import java.util.Collection;
 
 /**
  * Copyright (C) 2011  Nijikokun <nijikokun@gmail.com>
@@ -174,11 +176,11 @@ public class Misc {
      * @return
      */
     public static Player player(String name) {
-        if (Permissions.Server.getOnlinePlayers().length < 1) {
+        if (Permissions.Server.getOnlinePlayers().size() < 1) {
             return null;
         }
 
-        Player[] online = Permissions.Server.getOnlinePlayers();
+        Collection<? extends Player> online = Permissions.Server.getOnlinePlayers();
         Player player = null;
 
         for (Player needle : online) {
@@ -201,11 +203,11 @@ public class Misc {
      * @return
      */
     public static Player playerMatch(String name) {
-        if (Permissions.Server.getOnlinePlayers().length < 1) {
+        if (Permissions.Server.getOnlinePlayers().size() < 1) {
             return null;
         }
 
-        Player[] online = Permissions.Server.getOnlinePlayers();
+        Collection<? extends Player> online = Permissions.Server.getOnlinePlayers();
         Player lastPlayer = null;
 
         for (Player player : online) {

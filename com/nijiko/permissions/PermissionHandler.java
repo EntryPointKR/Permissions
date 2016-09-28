@@ -1,9 +1,10 @@
 package com.nijiko.permissions;
 
+import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.util.Map;
-import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
 
 /**
  * Permissions 2.1
@@ -88,14 +89,7 @@ public abstract class PermissionHandler {
     public abstract boolean permission(Player player, String permission);
 
     
-    /**
-     * Grabs group name.
-     * <br /><br />
-     * Namespace: groups.name
-     *
-     * @param group
-     * @return String
-     */
+
     public abstract String getGroup(String world, String name);
     @Deprecated
     public abstract String getGroup(String name);
@@ -218,136 +212,34 @@ public abstract class PermissionHandler {
     @Deprecated
     public abstract double getGroupPermissionDouble(String group, String permission);
 
-    /**
-     * Get permission nodes from a specific user that contain values.
-     * <br /><br />
-     * Grab User Permission String values.
-     *
-     * @param world
-     * @param group
-     * @param permission
-     * @return String. If no string found return "".
-     */
     public abstract String getUserPermissionString(String world, String name, String permission);
     @Deprecated
     public abstract String getUserPermissionString(String name, String permission);
-    
-    /**
-     * Get permission nodes from a specific user that contain values.
-     * <br /><br />
-     * Grab User Permission Integer values.
-     *
-     * @param world
-     * @param group
-     * @param permission
-     * @return Integer. No integer found return -1.
-     */
+
     public abstract int getUserPermissionInteger(String world, String name, String permission);
     @Deprecated
     public abstract int getUserPermissionInteger(String name, String permission);
-    
-    /**
-     * Get permission nodes from a specific user that contain values.
-     * <br /><br />
-     * Grab User Permission Boolean values.
-     *
-     * @param world
-     * @param group
-     * @param permission
-     * @return Boolean. No boolean found return false.
-     */
+
     public abstract boolean getUserPermissionBoolean(String world, String name, String permission);
     @Deprecated
     public abstract boolean getUserPermissionBoolean(String name, String permission);
 
-    /**
-     * Get permission nodes from a specific user that contain values.
-     * <br /><br />
-     * Grab User Permission Long values.
-     *
-     * @param group
-     * @param permission
-     * @return Long. No value found return 0L.
-	public abstract long getUserPermissionLong(String name, String permission);
-     */
-
-    /**
-     * Get permission nodes from a specific user that contain values.
-     * <br /><br />
-     * Grab User Permission Double values.
-     *
-     * @param world
-     * @param group
-     * @param permission
-     * @return Double. No value found return -1.0
-     */
     public abstract double getUserPermissionDouble(String world, String name, String permission);
     @Deprecated
     public abstract double getUserPermissionDouble(String name, String permission);
 
-    /**
-     * Get permission nodes from a user / group that contain values.
-     * <br /><br />
-     * Grab User Permission String values.
-     *
-     * @param world
-     * @param group
-     * @param permission
-     * @return String. If no string found return "".
-     */
     public abstract String getPermissionString(String world, String name, String permission);
     @Deprecated
     public abstract String getPermissionString(String name, String permission);
 
-    /**
-     * Get permission nodes from a user / group that contain values.
-     * <br /><br />
-     * Grab User Permission Integer values.
-     *
-     * @param world
-     * @param group
-     * @param permission
-     * @return Integer. No integer found return -1.
-     */
     public abstract int getPermissionInteger(String world, String name, String permission);
     @Deprecated
     public abstract int getPermissionInteger(String name, String permission);
 
-    /**
-     * Get permission nodes from a user / group that contain values.
-     * <br /><br />
-     * Grab User Permission Boolean values.
-     *
-     * @param world
-     * @param group
-     * @param permission
-     * @return Boolean. No boolean found return false.
-     */
     public abstract boolean getPermissionBoolean(String world, String name, String permission);
     @Deprecated
     public abstract boolean getPermissionBoolean(String name, String permission);
 
-    /**
-     * Get permission nodes from a user / group that contain values.
-     * <br /><br />
-     * Grab User Permission Long values.
-     *
-     * @param group
-     * @param permission
-     * @return Long. No value found return 0L.
-	public abstract long getPermissionLong(String name, String permission);
-     */
-
-    /**
-     * Get permission nodes from a user / group that contain values.
-     * <br /><br />
-     * Grab User Permission Double values.
-     *
-     * @param world
-     * @param group
-     * @param permission
-     * @return Double. No value found return -1.0
-     */
     public abstract double getPermissionDouble(String world, String name, String permission);
     @Deprecated
     public abstract double getPermissionDouble(String name, String permission);

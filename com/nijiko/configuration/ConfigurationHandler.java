@@ -1,6 +1,7 @@
 package com.nijiko.configuration;
 
-import org.bukkit.util.config.Configuration;
+
+import org.bukkit.configuration.Configuration;
 
 /**
  * Handles default configuration and loads data.
